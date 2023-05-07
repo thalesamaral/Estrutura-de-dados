@@ -8,7 +8,6 @@
 #define TAM 10
 
 int valida_nota(int);
-int valida_turma(char);
 
 struct tAluno{
 	char nome[50];
