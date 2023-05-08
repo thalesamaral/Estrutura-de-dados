@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAXP 10
 #define MAXF 5
 
 //*** Declaracoes de tipos ******************************************
@@ -18,6 +17,11 @@ struct tProduto{
 	float porcentoLucro;
 	//struct tFabricante fabricante[MAXF];
 };
+struct tNo{
+	struct tProduto dado;
+	struct tNo *prox;
+};
+
 struct tFabricante{
 	char marca[50];
 	char site[50];
@@ -31,7 +35,8 @@ int menu(void);
 int main(void){
 // Declarações
 	int i, opcao, qtdProdutos=0;
-	struct tProduto produto[MAXP];
+	//struct tProduto produto[MAXP];
+	struct tNo *novo, *p, *produto=NULL;
 	//struct tFabricante fabricante[MAXF];
 
 // Principal
@@ -43,33 +48,41 @@ int main(void){
         switch (opcao) {
                case 1: 
                     printf("\n\n*** Inclusao ***\n\n");
-                    if (qtdProdutos < MAXP) {
-                    	printf("Digite a descricao: ");
-                    	fflush(stdin);
-                    	gets(produto[qtdProdutos].descricao);
-						printf("Digite o peso...: ");
-                    	scanf("%f",&produto[qtdProdutos].peso);
-                    	printf("Digite o valor da compra....: ");
-                    	scanf("%f",&produto[qtdProdutos].valorCompra);
-						printf("Digite o valor da venda....: ");
-                    	scanf("%f",&produto[qtdProdutos].valorVenda);
-						produto[qtdProdutos].valorLucro = produto[qtdProdutos].valorCompra - produto[qtdProdutos].valorVenda;
-						produto[qtdProdutos].porcentoLucro = (produto[qtdProdutos].valorVenda*100)/produto[qtdProdutos].valorCompra;
-                    	qtdProdutos++;
-					}
-					else
-						printf("Vetor cheio!\n");
+					novo = malloc(sizeof(struct tNo));
+					printf("Digite a descricao: ");
+					fflush(stdin);
+					gets(((*novo).dado.descricao));
+					printf("Digite o peso...: ");
+					scanf("%f",&((*novo).dado.peso));
+					printf("Digite o valor da compra....: ");
+					scanf("%f",&((*novo).dado.valorCompra));
+					printf("Digite o valor da venda....: ");
+					scanf("%f",&((*novo).dado.valorVenda));
+					(*novo).prox = produto;
+					produto = novo;
+					(*produto).dado.valorLucro = (*produto).dado.valorCompra - (*produto).dado.valorVenda;
+					(*produto).dado.porcentoLucro = ((*produto).dado.valorVenda*100)/(*produto).dado.valorCompra;
 	                break;
                case 2: 
                     printf("\n\n*** Listagem ***\n\n");
-                    for (i=0; i<qtdProdutos; i++){
+					p = produto;
+					while(p != NULL){
+						printf("descricao: %s\n", (*p).dado.descricao);
+						printf("peso: %.2f\n", (*p).dado.peso);
+						printf("valorCompra: %.2f\n", (*p).dado.valorCompra);
+						printf("valorVenda: %.2f\n", (*p).dado.valorVenda);
+						printf("valorLucro: %.2f\n", (*p).dado.valorLucro);
+						printf("porcentoLucro: %.2f%%\n", (*p).dado.porcentoLucro);
+						p = (*p).prox;
+					}
+                    /*for (i=0; i<qtdProdutos; i++){
                     	printf("descricao: %s\n", produto[i].descricao);
 						printf("peso: %.2f\n", produto[i].peso);
 						printf("valorCompra: %.2f\n", produto[i].valorCompra);
 						printf("valorVenda: %.2f\n", produto[i].valorVenda);
 						printf("valorLucro: %.2f\n", produto[i].valorLucro);
 						printf("porcentoLucro: %.2f%%\n", produto[i].porcentoLucro);
-					}
+					}*/
 	                break;
         }
     } while (opcao != 0);
